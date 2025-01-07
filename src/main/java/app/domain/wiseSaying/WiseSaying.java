@@ -22,7 +22,12 @@ public class WiseSaying {
     }
 
     public static WiseSaying fromMap(Map<String, Object> map) {
-        return null;
+
+        int id = (int)map.get("id");
+        String content = (String) map.get("content");
+        String author = (String) map.get("author");
+
+        return new WiseSaying(id, content, author);
     }
 
     public boolean isNew() {
