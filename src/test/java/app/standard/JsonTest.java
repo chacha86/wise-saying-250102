@@ -153,4 +153,18 @@ public class JsonTest {
                 .containsEntry("content", "aaa")
                 .containsEntry("author", "bbb");
     }
+
+    @Test
+    @DisplayName("Map을 WiseSaying으로 변환")
+    void t8() {
+
+        String filePath = "test/%d.json".formatted(1);
+        Map<String, Object> map = Util.Json.readAsMap(filePath);
+
+        WiseSaying wiseSaying = WiseSaying.fromMap(map);
+
+        assertThat(wiseSaying.getId()).isEqualTo(1);
+        assertThat(wiseSaying.getContent()).isEqualTo("aaa");
+        assertThat(wiseSaying.getAuthor()).isEqualTo("bbb");
+    }
 }

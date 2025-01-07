@@ -21,6 +21,10 @@ public class WiseSaying {
         this.author = author;
     }
 
+    public static WiseSaying fromMap(Map<String, Object> map) {
+        return null;
+    }
+
     public boolean isNew() {
         return this.id == 0;
     }
