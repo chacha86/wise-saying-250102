@@ -62,9 +62,14 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     }
 
-    public Page findAll(int itemsPerPage) {
+    public Page findAll(int itemsPerPage, int page) {
         List<WiseSaying> wiseSayings = findAll();
-        return new Page(wiseSayings, wiseSayings.size(), itemsPerPage);
+        List<WiseSaying> pageContent = wiseSayings.stream()
+                .skip((long)(page - 1) * itemsPerPage)
+                .limit(itemsPerPage)
+                .toList();
+
+        return new Page(pageContent, wiseSayings.size(), itemsPerPage);
     }
 
     public boolean deleteById(int id) {

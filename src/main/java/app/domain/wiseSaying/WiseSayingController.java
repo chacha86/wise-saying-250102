@@ -36,14 +36,14 @@ public class WiseSayingController {
 
         List<WiseSaying> wiseSayingList;
 
-        Page pageContent = wiseSayingService.getAllItems(itemsPerPage);
+        Page pageContent = wiseSayingService.getAllItems(itemsPerPage, page);
 
         if(command.isSearchCommand()) {
 
             String ktype = command.getParam("keywordType");
             String kw = command.getParam("keyword");
 
-            wiseSayingList = wiseSayingService.search(ktype, kw, itemsPerPage);
+            wiseSayingList = wiseSayingService.search(ktype, kw, itemsPerPage, page);
         } else {
             wiseSayingList = pageContent.getWiseSayings();
         }
