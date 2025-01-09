@@ -356,4 +356,23 @@ public class WiseSayingControllerTest {
                 .contains("18 / 작가18 / 명언18")
                 .contains("1 / 2 / [3] / 4 / 5 / 6");
     }
+
+    @Test
+    @DisplayName("검색 UI 출력")
+    void t22() {
+
+        String out = TestBot.run("""
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                목록?keywordType=content&keyword=과거
+                """);
+
+        assertThat(out)
+                .contains("검색타입 : content")
+                .contains("검색어 : 과거");
+    }
 }
