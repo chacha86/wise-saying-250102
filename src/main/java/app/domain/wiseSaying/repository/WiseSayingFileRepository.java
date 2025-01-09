@@ -9,10 +9,7 @@ import app.standard.Util;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class WiseSayingFileRepository implements WiseSayingRepository {
 
@@ -76,6 +73,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         int totalItems = searchedWiseSayings.size();
 
         List<WiseSaying> searchedResult = searchedWiseSayings.stream()
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed()) // 기본은 오름차순. 내림차순
                 .skip((long) (page - 1) * itemsPerPage)
                 .limit(itemsPerPage)
                 .toList();
