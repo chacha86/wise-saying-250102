@@ -49,16 +49,6 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         return wiseSaying;
     }
 
-    List<WiseSaying> findAll() {
-        return Util.File.getPaths(DB_PATH).stream()
-                .map(Path::toString)
-                .filter(path -> path.endsWith(".json"))
-                .map(Util.Json::readAsMap)
-                .map(WiseSaying::fromMap)
-                .toList();
-
-    }
-
     public Page findByKeyword(String ktype, String kw, int itemsPerPage, int page) {
 
         List<WiseSaying> searchedWiseSayings = findAll().stream()
@@ -69,28 +59,39 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
                         return w.getAuthor().contains(kw);
                     }
                 })
-                .toList();
-        int totalItems = searchedWiseSayings.size();
-
-        List<WiseSaying> searchedResult = searchedWiseSayings.stream()
                 .sorted(Comparator.comparing(WiseSaying::getId).reversed()) // 기본은 오름차순. 내림차순
-                .skip((long) (page - 1) * itemsPerPage)
-                .limit(itemsPerPage)
                 .toList();
 
-        return new Page(searchedResult, totalItems, itemsPerPage);
+        return pageOf(searchedWiseSayings, itemsPerPage, page);
     }
 
     public Page findAll(int itemsPerPage, int page) {
-        List<WiseSaying> wiseSayings = findAll();
+        List<WiseSaying> sortedWiseSayings = findAll().stream()
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed())
+                .toList();
+
+        return pageOf(sortedWiseSayings, itemsPerPage, page);
+    }
+
+    List<WiseSaying> findAll() {
+        return Util.File.getPaths(DB_PATH).stream()
+                .map(Path::toString)
+                .filter(path -> path.endsWith(".json"))
+                .map(Util.Json::readAsMap)
+                .map(WiseSaying::fromMap)
+                .toList();
+
+    }
+
+    private Page pageOf(List<WiseSaying> wiseSayings, int itemsPerPage, int page) {
+        int totalItems = wiseSayings.size();
 
         List<WiseSaying> pageContent = wiseSayings.stream()
-                .sorted(Comparator.comparing(WiseSaying::getId).reversed())
                 .skip((long) (page - 1) * itemsPerPage)
                 .limit(itemsPerPage)
                 .toList();
 
-        return new Page(pageContent, wiseSayings.size(), itemsPerPage);
+        return new Page(pageContent, totalItems, itemsPerPage);
     }
 
     public boolean deleteById(int id) {
