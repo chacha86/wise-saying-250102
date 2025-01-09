@@ -85,6 +85,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         List<WiseSaying> wiseSayings = findAll();
 
         List<WiseSaying> pageContent = wiseSayings.stream()
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed())
                 .skip((long) (page - 1) * itemsPerPage)
                 .limit(itemsPerPage)
                 .toList();
