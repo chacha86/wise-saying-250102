@@ -298,4 +298,34 @@ public class WiseSayingControllerTest {
                 .contains("1 / 2 / 3 / [4] / 5 / 6");
 
     }
+
+    @Test
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기")
+    void t19() {
+        TestBot.makeSample(15);
+
+        // 1 / 작가1 / 명언1
+        // 2 / 작가2 / 명언2
+        // 3 / 작가3 / 명언3
+        // ....
+        // 15 / 작가15 / 명언15
+
+        // 1, 10, 11, 12, 13, 14, 15
+
+        // 15, 14, 13, 12, 11  - 1 페이지
+        // 10, 1 - 2 페이지
+
+
+        String out = TestBot.run("""
+                목록?keywordType=content&keyword=1
+                """);
+
+        assertThat(out)
+                .containsSubsequence("15 / 작가15 / 명언 15", "14 / 작가 14 / 명언14")
+                .doesNotContain("10 / 작가10 / 명언10");
+
+        assertThat(out)
+                .contains("[1] / 2");
+
+    }
 }
