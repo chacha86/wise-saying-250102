@@ -189,12 +189,11 @@ public class WiseSayingFileRepositoryTest {
         WiseSaying wiseSaying3 = new WiseSaying("eee", "fff");
         wiseSayingRepository.save(wiseSaying3);
 
-        // [List<WiseSaying> wiseSayings, totalItems, totalPages, page]= wiseSayingRepository.findAll();
         int itemsPerPage = 5;
         int page = 1;
-        Page pageContent = wiseSayingRepository.findAll(itemsPerPage, page);
+        Page<WiseSaying> pageContent = wiseSayingRepository.findAll(itemsPerPage, page);
 
-        List<WiseSaying> wiseSayings = pageContent.getWiseSayings();
+        List<WiseSaying> wiseSayings = pageContent.getContent();
         int totalItems = pageContent.getTotalItems();
         int totalPages = pageContent.getTotalPages();
 

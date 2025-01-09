@@ -20,7 +20,7 @@ public class WiseSayingService {
         return wiseSayingRepository.save(wiseSaying);
     }
 
-    public Page getAllItems(int itemsPerPage, int page) {
+    public Page<WiseSaying> getAllItems(int itemsPerPage, int page) {
         return wiseSayingRepository.findAll(itemsPerPage, page);
     }
 
@@ -43,7 +43,7 @@ public class WiseSayingService {
         wiseSayingRepository.build();
     }
 
-    public Page search(String ktype, String kw, int itemsPerPage, int page) {
+    public Page<WiseSaying> search(String ktype, String kw, int itemsPerPage, int page) {
         return wiseSayingRepository.findByKeyword(ktype, kw, itemsPerPage, page);
     }
 
