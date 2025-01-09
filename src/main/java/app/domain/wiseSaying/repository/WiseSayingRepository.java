@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface WiseSayingRepository {
 
     WiseSaying save(WiseSaying wiseSaying);
-    Page findAll();
+    Page findAll(int itemsPerPage);
     boolean deleteById(int id);
     Optional<WiseSaying> findById(int id);
     void build();
