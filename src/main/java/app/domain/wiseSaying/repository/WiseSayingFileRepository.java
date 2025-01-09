@@ -64,9 +64,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
                 .map(WiseSaying::fromMap)
                 .toList();
 
-        int totalPages = (int) Math.ceil((double) wiseSayings.size() / itemsPerPage);
-
-        return new Page(wiseSayings, totalPages, wiseSayings.size());
+        return new Page(wiseSayings, wiseSayings.size(), itemsPerPage);
     }
 
     public boolean deleteById(int id) {
