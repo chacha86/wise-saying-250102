@@ -300,7 +300,7 @@ public class WiseSayingControllerTest {
     }
 
     @Test
-    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기")
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기1")
     void t19() {
         TestBot.makeSample(15);
 
@@ -327,5 +327,38 @@ public class WiseSayingControllerTest {
         assertThat(out)
                 .contains("[1] / 2");
 
+    }
+
+    @Test
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기2")
+    void t20() {
+        TestBot.makeSample(15);
+        String out = TestBot.run("""
+                목록?keywordType=content&keyword=1&page=2
+                """);
+
+        assertThat(out)
+                .containsSubsequence("10 / 작가10 / 명언10", "1 / 작가1 / 명언1")
+                .doesNotContain("11 / 작가11 / 명언11");
+
+        assertThat(out)
+                .contains("1 / [2]");
+    }
+
+    @Test
+    @DisplayName("페이징 - 실제 페이제 맞는 데이터 가져오기3")
+    void t21() {
+        TestBot.makeSample(30);
+        String out = TestBot.run("""
+                목록?page=3
+                """);
+
+        assertThat(out)
+                .containsSubsequence("10 / 작가10 / 명언10", "1 / 작가1 / 명언1")
+                .doesNotContain("11 / 작가11 / 명언11");
+
+        assertThat(out)
+                .contains("18 / 작가18 / 명언18")
+                .contains("1 / 2 / [3] / 4 / 5 / 6");
     }
 }
