@@ -62,10 +62,32 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     }
 
+    public Page findByKeyword(String ktype, String kw, int itemsPerPage, int page) {
+
+        List<WiseSaying> searchedWiseSayings = findAll().stream()
+                .filter(w -> {
+                    if (ktype.equals("content")) {
+                        return w.getContent().contains(kw);
+                    } else {
+                        return w.getAuthor().contains(kw);
+                    }
+                })
+                .toList();
+        int totalItems = searchedWiseSayings.size();
+
+        List<WiseSaying> searchedResult = searchedWiseSayings.stream()
+                .skip((long) (page - 1) * itemsPerPage)
+                .limit(itemsPerPage)
+                .toList();
+
+        return new Page(searchedResult, totalItems, itemsPerPage);
+    }
+
     public Page findAll(int itemsPerPage, int page) {
         List<WiseSaying> wiseSayings = findAll();
+
         List<WiseSaying> pageContent = wiseSayings.stream()
-                .skip((long)(page - 1) * itemsPerPage)
+                .skip((long) (page - 1) * itemsPerPage)
                 .limit(itemsPerPage)
                 .toList();
 
@@ -122,7 +144,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     @Override
     public void makeSampleData(int cnt) {
-        for(int i = 1; i <= cnt; i++) {
+        for (int i = 1; i <= cnt; i++) {
             WiseSaying wiseSaying = new WiseSaying("명언" + i, "작가" + i);
             save(wiseSaying);
         }

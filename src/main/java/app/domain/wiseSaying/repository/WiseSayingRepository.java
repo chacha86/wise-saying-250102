@@ -15,4 +15,5 @@ public interface WiseSayingRepository {
     void build();
     void makeSampleData(int cnt);
     int count();
+    Page findByKeyword(String ktype, String kw, int itemsPerPage, int page);
 }

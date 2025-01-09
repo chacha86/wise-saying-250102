@@ -33,27 +33,24 @@ public class WiseSayingController {
         System.out.println("----------------------");
 
         int page = command.getParamAsInt("page", 1);
-
-        List<WiseSaying> wiseSayingList;
-
-        Page pageContent = wiseSayingService.getAllItems(itemsPerPage, page);
+        Page pageContent;
 
         if(command.isSearchCommand()) {
 
             String ktype = command.getParam("keywordType");
             String kw = command.getParam("keyword");
 
-            wiseSayingList = wiseSayingService.search(ktype, kw, itemsPerPage, page);
+            pageContent = wiseSayingService.search(ktype, kw, itemsPerPage, page);
         } else {
-            wiseSayingList = pageContent.getWiseSayings();
+            pageContent = wiseSayingService.getAllItems(itemsPerPage, page);
         }
 
-        if(wiseSayingList.isEmpty()) {
+        if(pageContent.getWiseSayings().isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");
             return;
         }
 
-        wiseSayingList.reversed().forEach(w -> {
+        pageContent.getWiseSayings().reversed().forEach(w -> {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
 
