@@ -105,4 +105,22 @@ public class WiseSyaingDbRepositoryTest {
                         """.stripIndent().trim());
 
     }
+
+    @Test
+    @DisplayName("현재 저장된 명언의 개수를 가져오는 count")
+    void t5() {
+
+        WiseSaying wiseSaying1 = new WiseSaying("aaa", "bbb");
+        wiseSayingDbRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying("ccc", "ddd");
+        wiseSayingDbRepository.save(wiseSaying2);
+
+
+        int count = wiseSayingDbRepository.count();
+
+        assertThat(count)
+                .isEqualTo(2);
+
+    }
 }
