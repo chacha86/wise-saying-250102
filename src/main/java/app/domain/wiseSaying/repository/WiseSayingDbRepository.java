@@ -23,12 +23,22 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
 
     public WiseSaying save(WiseSaying wiseSaying) {
         Sql sql = simpleDb.genSql();
-        sql.append("INSERT INTO wise_saying")
-                .append("SET content = ?,", wiseSaying.getContent())
-                .append("author = ?", wiseSaying.getAuthor());
 
-        long generatedId = sql.insert();
-        wiseSaying.setId((int) generatedId);
+        if(wiseSaying.isNew()) {
+            sql.append("INSERT INTO wise_saying")
+                    .append("SET content = ?,", wiseSaying.getContent())
+                    .append("author = ?", wiseSaying.getAuthor());
+
+            long generatedId = sql.insert();
+            wiseSaying.setId((int) generatedId);
+
+            return wiseSaying;
+        }
+
+        sql.append("UPDATE wise_saying")
+                .append("SET content = ?,", wiseSaying.getContent())
+                .append("author = ?", wiseSaying.getAuthor())
+                .update();
 
         return wiseSaying;
     }
@@ -64,6 +74,7 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
         List<WiseSaying> content = simpleDb.genSql()
                 .append("SELECT *")
                 .append("FROM wise_saying")
+                .append("ORDER BY id DESC")
                 .append("LIMIT ?, ?", (long) (page - 1) * itemsPerPage, itemsPerPage)
                 .selectRows(WiseSaying.class);
 
