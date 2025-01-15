@@ -24,7 +24,7 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
     public WiseSaying save(WiseSaying wiseSaying) {
         Sql sql = simpleDb.genSql();
 
-        if(wiseSaying.isNew()) {
+        if (wiseSaying.isNew()) {
             sql.append("INSERT INTO wise_saying")
                     .append("SET content = ?,", wiseSaying.getContent())
                     .append("author = ?", wiseSaying.getAuthor());
@@ -110,18 +110,23 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
     }
 
     public int count(String ktype, String kw) {
-        long cnt = simpleDb.genSql()
-                .append("SELECT COUNT(*)")
-                .append("FROM wise_saying")
-                .append("WHERE content LIKE CONCAT('%', ?, '%')", kw)
-                .selectLong();
+        Sql sql = simpleDb.genSql();
+        sql.append("SELECT *")
+                .append("FROM wise_saying");
 
+        if (ktype.equals("content")) {
+            sql.append("WHERE content LIKE CONCAT('%', ?, '%')", kw);
+        } else {
+            sql.append("WHERE author LIKE CONCAT('%', ?, '%')", kw);
+        }
+
+        long cnt = sql.selectLong();
         return (int) cnt;
     }
 
     @Override
     public void makeSampleData(int cnt) {
-        for(int i = 1; i <= cnt; i++) {
+        for (int i = 1; i <= cnt; i++) {
             save(new WiseSaying("명언" + i, "작가" + i));
         }
     }
@@ -131,14 +136,22 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
 
         int totalItems = count(ktype, kw); // 검색 결과 수
 
-        List<WiseSaying> content = simpleDb.genSql()
-                .append("SELECT *")
-                .append("FROM wise_saying")
-                .append("WHERE content LIKE CONCAT('%', ?, '%')", kw)
-                .append("ORDER BY id DESC")
+        Sql sql = simpleDb.genSql();
+
+        sql.append("SELECT *")
+                .append("FROM wise_saying");
+
+        if (ktype.equals("content")) {
+            sql.append("WHERE content LIKE CONCAT('%', ?, '%')", kw);
+        } else {
+            sql.append("WHERE author LIKE CONCAT('%', ?, '%')", kw);
+        }
+
+        sql.append("ORDER BY id DESC")
                 .append("LIMIT ?, ?", (long) (page - 1) * itemsPerPage, itemsPerPage)
                 .selectRows(WiseSaying.class);
 
+        List<WiseSaying> content = sql.selectRows(WiseSaying.class);
         return new Page(content, totalItems, itemsPerPage, page);
     }
 

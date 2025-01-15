@@ -398,7 +398,7 @@ public class WiseSayingControllerTest {
                 """);
 
         assertThat(out)
-                .contains("1 / 홍길동/ 현재를 사랑하라.")
+                .contains("1 / 홍길동 / 현재를 사랑하라.")
                 .doesNotContain("2 / 이순신 / 과거에 집착하지 마라.");
     }
 }
