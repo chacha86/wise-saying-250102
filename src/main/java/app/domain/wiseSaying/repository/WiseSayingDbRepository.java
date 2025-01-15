@@ -4,6 +4,7 @@ import app.domain.wiseSaying.WiseSaying;
 import app.standard.simpleDb.SimpleDb;
 import app.standard.simpleDb.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
 public class WiseSayingDbRepository {
@@ -67,5 +68,11 @@ public class WiseSayingDbRepository {
                 .delete();
 
         return rst > 0;
+    }
+
+    public List<WiseSaying> findAll() {
+        return simpleDb.genSql().append("SELECT *")
+                .append("FROM wise_saying")
+                .selectRows(WiseSaying.class);
     }
 }
