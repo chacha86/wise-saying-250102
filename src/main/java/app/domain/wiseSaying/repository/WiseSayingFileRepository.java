@@ -65,6 +65,20 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         return pageOf(searchedWiseSayings, itemsPerPage, page);
     }
 
+    @Override
+    public void createTable() {
+        // 기존 테이블 삭제
+        Util.File.deleteForce(DB_PATH);
+        // 새 테이블 생성
+        Util.File.createDir(DB_PATH);
+    }
+
+    @Override
+    public void truncateTable() {
+        // 기존의 명언 데이터와 lastId 삭제
+        Util.File.deleteForce(DB_PATH);
+    }
+
     public Page<WiseSaying> findAll(int itemsPerPage, int page) {
         List<WiseSaying> sortedWiseSayings = findAll().stream()
                 .sorted(Comparator.comparing(WiseSaying::getId).reversed())
@@ -142,7 +156,6 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         Util.File.write(BUILD_PATH, jsonStr);
     }
 
-    @Override
     public void makeSampleData(int cnt) {
         for (int i = 1; i <= cnt; i++) {
             WiseSaying wiseSaying = new WiseSaying("명언" + i, "작가" + i);

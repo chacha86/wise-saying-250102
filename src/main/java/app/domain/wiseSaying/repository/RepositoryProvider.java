@@ -12,6 +12,6 @@ public class RepositoryProvider {
 //            return new WiseSayingMemRepository();
 //        }
 
-        return new WiseSayingFileRepository();
+        return new WiseSayingDbRepository();
     }
 }

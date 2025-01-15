@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +20,12 @@ public class WiseSyaingDbRepositoryTest {
 
     @BeforeAll
     static void dropTable() {
-        wiseSayingDbRepository.createWiseSayingTable();
+        wiseSayingDbRepository.createTable();
     }
 
     @BeforeEach
     void truncateArticleTable() {
-        wiseSayingDbRepository.truncateWiseSayingTable();
+        wiseSayingDbRepository.truncateTable();
     }
 
     @Test
