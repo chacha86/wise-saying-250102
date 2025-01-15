@@ -382,4 +382,23 @@ public class WiseSayingControllerTest {
                 .contains("검색타입 : content")
                 .contains("검색어 : 과거");
     }
+
+    @Test
+    @DisplayName("작가로 검색")
+    void t23() {
+
+        String out = TestBot.run("""
+                등록
+                현재를 사랑하라.
+                홍길동
+                등록
+                과거에 집착하지 마라.
+                이순신
+                목록?keywordType=author&keyword=홍
+                """);
+
+        assertThat(out)
+                .contains("1 / 홍길동/ 현재를 사랑하라.")
+                .doesNotContain("2 / 이순신 / 과거에 집착하지 마라.");
+    }
 }
