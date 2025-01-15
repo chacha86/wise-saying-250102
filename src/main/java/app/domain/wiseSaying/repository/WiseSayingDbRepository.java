@@ -1,4 +1,5 @@
 package app.domain.wiseSaying.repository;
+
 import app.domain.wiseSaying.WiseSaying;
 import app.standard.simpleDb.SimpleDb;
 import app.standard.simpleDb.Sql;
@@ -52,10 +53,19 @@ public class WiseSayingDbRepository {
 
         WiseSaying wiseSaying = sql.selectRow(WiseSaying.class);
 
-        if(wiseSaying == null) {
+        if (wiseSaying == null) {
             return Optional.empty();
         }
 
         return Optional.of(wiseSaying);
+    }
+
+    public boolean deleteById(int id) {
+
+        int rst = simpleDb.genSql().append("DELETE FROM wise_saying")
+                .append("WHERE id = ?", id)
+                .delete();
+
+        return rst > 0;
     }
 }
