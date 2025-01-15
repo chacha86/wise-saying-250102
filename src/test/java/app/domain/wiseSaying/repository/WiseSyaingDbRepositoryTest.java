@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,5 +52,24 @@ public class WiseSyaingDbRepositoryTest {
 
         boolean delRst = wiseSayingDbRepository.deleteById(wiseSaying.getId());
         assertThat(delRst).isTrue();
+    }
+
+    @Test
+    @DisplayName("모든 명언 가져오기")
+    void t3() {
+
+        WiseSaying wiseSaying1 = new WiseSaying("aaa1", "bbb1");
+        WiseSaying wiseSaying2 = new WiseSaying("aaa2", "bbb2");
+        WiseSaying wiseSaying3 = new WiseSaying("aaa3", "bbb3");
+
+        wiseSayingDbRepository.save(wiseSaying1);
+        wiseSayingDbRepository.save(wiseSaying2);
+        wiseSayingDbRepository.save(wiseSaying3);
+
+        List<WiseSaying> wiseSayings = wiseSayingDbRepository.findAll();
+
+        assertThat(wiseSayings).hasSize(3);
+        assertThat(wiseSayings).contains(wiseSaying1, wiseSaying2, wiseSaying3);
+
     }
 }
