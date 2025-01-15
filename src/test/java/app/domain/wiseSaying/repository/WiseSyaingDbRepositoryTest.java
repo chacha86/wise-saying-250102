@@ -86,7 +86,7 @@ public class WiseSyaingDbRepositoryTest {
 
         wiseSayingDbRepository.build();
 
-        String jsonStr = Util.File.readAsString(WiseSayingFileRepository.getBuildPath());
+        String jsonStr = Util.File.readAsString(WiseSayingDbRepository.getBuildPath());
 
         assertThat(jsonStr)
                 .isEqualTo("""
