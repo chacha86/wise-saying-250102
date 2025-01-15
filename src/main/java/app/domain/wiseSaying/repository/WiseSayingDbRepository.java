@@ -111,7 +111,7 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
 
     public int count(String ktype, String kw) {
         Sql sql = simpleDb.genSql();
-        sql.append("SELECT *")
+        sql.append("SELECT COUNT(*)")
                 .append("FROM wise_saying");
 
         if (ktype.equals("content")) {
@@ -152,7 +152,7 @@ public class WiseSayingDbRepository implements WiseSayingRepository {
                 .selectRows(WiseSaying.class);
 
         List<WiseSaying> content = sql.selectRows(WiseSaying.class);
-        return new Page(content, totalItems, itemsPerPage, page);
+        return new Page<>(content, totalItems, itemsPerPage, page);
     }
 
     @Override

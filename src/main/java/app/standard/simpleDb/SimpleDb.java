@@ -104,9 +104,39 @@ public class SimpleDb {
         return new Sql(this);
     }
 
-    private <T> T _run(String sql, Class<T> cls, List<Object> params) {
-        System.out.println("sql : " + sql);
+    // SQL에 파라미터를 적용한 raw SQL 생성
+    private String rawSql(String sql, Object[] params) {
+        StringBuilder processedSql = new StringBuilder(sql);
+        int index = 0;
 
+        for (Object param : params) {
+            index = processedSql.indexOf("?", index);
+            if (index == -1) break;
+
+            String replacement = formatRawSqlParam(param);
+            processedSql.replace(index, index + 1, replacement);
+            index += replacement.length();
+        }
+
+        return processedSql.toString();
+    }
+
+    // 파라미터를 적절한 SQL 값으로 변환
+    private String formatRawSqlParam(Object param) {
+        if (param == null) return "NULL";
+        if (param instanceof Boolean) return param.toString().toUpperCase();
+        if (param instanceof Number) return param.toString();
+        if (param instanceof String || param instanceof LocalDateTime) {
+            return "'" + param.toString().replace("'", "''") + "'";
+        }
+        return "'" + Objects.toString(param, "") + "'";
+    }
+
+    private <T> T _run(String sql, Class<T> cls, List<Object> params) {
+
+        if(devMode) {
+            System.out.println("sql : " + rawSql(sql, params.toArray()));
+        }
         Connection connection = getCurrentThreadConnection();
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             setParams(stmt, params);
