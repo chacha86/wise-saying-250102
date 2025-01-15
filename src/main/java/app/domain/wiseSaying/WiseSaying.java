@@ -10,6 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 public class WiseSaying {
 
     private int id;
