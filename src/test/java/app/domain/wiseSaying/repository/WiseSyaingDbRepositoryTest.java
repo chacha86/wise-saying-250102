@@ -1,6 +1,7 @@
 package app.domain.wiseSaying.repository;
 
 import app.domain.wiseSaying.WiseSaying;
+import app.standard.Util;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,6 +71,38 @@ public class WiseSyaingDbRepositoryTest {
 
         assertThat(wiseSayings).hasSize(3);
         assertThat(wiseSayings).contains(wiseSaying1, wiseSaying2, wiseSaying3);
+
+    }
+
+    @Test
+    @DisplayName("build 하면 모든 명언을 모아 하나의 파일로 저장")
+    void t4() {
+
+        WiseSaying wiseSaying1 = new WiseSaying("aaa", "bbb");
+        wiseSayingDbRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying("ccc", "ddd");
+        wiseSayingDbRepository.save(wiseSaying2);
+
+        wiseSayingDbRepository.build();
+
+        String jsonStr = Util.File.readAsString(WiseSayingFileRepository.getBuildPath());
+
+        assertThat(jsonStr)
+                .isEqualTo("""
+                        [
+                            {
+                                "id" : 1,
+                                "content" : "aaa",
+                                "author" : "bbb"
+                            },
+                            {
+                                "id" : 2,
+                                "content" : "ccc",
+                                "author" : "ddd"
+                            }
+                        ]
+                        """.stripIndent().trim());
 
     }
 }
