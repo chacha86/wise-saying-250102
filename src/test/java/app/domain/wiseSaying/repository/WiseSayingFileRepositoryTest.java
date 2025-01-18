@@ -25,12 +25,12 @@ public class WiseSayingFileRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Util.File.deleteForce(AppConfig.getDbPath());
+        wiseSayingRepository.createTable();
     }
 
     @AfterEach
     void afterEach() {
-        Util.File.deleteForce(AppConfig.getDbPath());
+        wiseSayingRepository.truncateTable();
     }
 
     @Test
